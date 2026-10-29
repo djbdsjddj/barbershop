@@ -2,26 +2,100 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
   }
-}
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
 
-@layer utilities {
-  .text-balance {
+  body {
+    @apply min-h-screen bg-canvas font-sans text-ink antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-semibold tracking-tight text-ink;
     text-wrap: balance;
   }
+
+  ::selection {
+    @apply bg-brass text-brass-ink;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brass ring-offset-2 ring-offset-canvas;
+  }
+
+  /* Times, prices, phones, KPIs: columns must line up */
+  .font-mono,
+  code,
+  kbd {
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #2e323c transparent;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-card border border-line bg-surface;
+  }
+
+  .glass-header {
+    @apply sticky top-0 z-40 border-b border-line;
+    background: rgba(9, 9, 11, 0.72);
+    backdrop-filter: saturate(140%) blur(14px);
+    -webkit-backdrop-filter: saturate(140%) blur(14px);
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-control px-4 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40;
+  }
+  .btn-primary {
+    @apply btn bg-brass text-brass-ink hover:bg-brass-hover;
+  }
+  .btn-ghost {
+    @apply btn border border-line bg-raised text-ink hover:border-line-strong;
+  }
+
+  .input {
+    @apply w-full rounded-control border border-line bg-raised px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-brass focus:outline-none;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-2xs font-semibold;
+  }
+  .badge-confirmed { @apply badge border-status-confirmed/30 bg-status-confirmed/10 text-status-confirmed; }
+  .badge-in-chair { @apply badge border-status-in-chair/30 bg-status-in-chair/10 text-status-in-chair; }
+  .badge-completed { @apply badge border-status-completed/30 bg-status-completed/10 text-status-completed; }
+  .badge-cancelled,
+  .badge-blocked { @apply badge border-status-cancelled/30 bg-status-cancelled/10 text-status-cancelled; }
+
+  .hairline {
+    @apply h-px w-full bg-line;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  body * { visibility: hidden; }
+  .print-area, .print-area * { visibility: visible; }
+  .print-area { position: fixed; inset: 0; padding-top: 4rem; color: #000; }
+  .print-area button { display: none; }
 }
